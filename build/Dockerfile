@@ -8,7 +8,7 @@ COPY --from=qemu /qemu-arm /usr/bin/qemu-arm-static
 
 ARG version
 
-RUN apt-get update && & apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     avrdude build-essential cmake git haproxy imagemagick libav-tools \
     libjpeg-dev libjpeg62-turbo libprotobuf-dev libv4l-dev psmisc \
     supervisor unzip wget zlib1g-dev nano
@@ -23,7 +23,9 @@ RUN make install
 WORKDIR /OctoPrint-${version}
 RUN pip install -r requirements.txt
 RUN python setup.py install
+RUN mv /usr/local/lib/python2.7/site-packages /usr/local/lib/python2.7/site-packages-moved
 
+VOLUME /usr/local/lib/python2.7/site-packages
 VOLUME /data
 WORKDIR /data
 
